@@ -144,6 +144,29 @@ MagicSquare::value_type MagicSquare::getBackDiagonalSum() const
 	return result;
 }
 
+MagicSquare::position_type MagicSquare::findNumber(value_type number) const
+{
+	if (isValidNumber(number))
+	{
+		for (size_type i{}, n{ getSize() }; i < n; ++i)
+		{
+			for (size_type j{}; j < n; ++j)
+			{
+				if (square[i][j] == number)
+					return position_type(i, j);
+			}
+		}
+	}
+	return noPosition;
+}
+
+const MagicSquare::row_type& MagicSquare::operator[](size_type rowIdx) const
+{
+	if (!isValidIdx(rowIdx))
+		throw InvalidIdx(rowIdx, getSize());
+	return square[rowIdx];
+}
+
 MagicSquare::size_type MagicSquare::calculateFieldWidth() const
 {
 	return size_type(to_string(getMaxNumber()).size());
