@@ -95,6 +95,21 @@ All the public methods of the `MagicSquare` class with a short explanation are c
 
 ## Usage of the MagicGenerator class:
 
+The MagicGenerator class provides a single public method: `void start()`, which is responsible for displaying interactive menu and managing user choices.
+The following snippet of code shows an exemplary usage of the class.
+
+```cpp
+#include "MagicGenerator.h"
+
+int main() {	
+	MagicGenerator generator;
+	generator.start();
+}
+```
+The result of running the program is as follows:
+
+![Screenshot]()
+
 ## Author:
 
 My GitHub: [@adamgracikowski](https://github.com/adamgracikowski)
