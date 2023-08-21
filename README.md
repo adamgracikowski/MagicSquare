@@ -15,7 +15,7 @@ The main incentive for this project was an assignment given to my friend as a pa
 
 ## [What is a Magic Square?](https://en.wikipedia.org/wiki/Magic_square)
 
-A Magic Square is a square array of numbers consisting of the distinct positive integers 1, 2, ..., n^2^  arranged such that the sum of the n numbers in any horizontal, vertical, or main diagonal line is always the same number, known as the magic constant.
+A Magic Square is a square array of numbers consisting of the distinct positive integers 1, 2, ..., <var>n<sup>2</sup></var>  arranged such that the sum of the n numbers in any horizontal, vertical, or main diagonal line is always the same number, known as the magic constant.
 Magic Squares have a long history, dating back to at least 190 BCE in China. At various times they have acquired occult or mythical significance, and have appeared as symbols in works of art.
 As such, Magic Square problems are part of [recreational mathematics](https://en.wikipedia.org/wiki/Recreational_mathematics).
 
