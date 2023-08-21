@@ -108,7 +108,9 @@ int main() {
 ```
 The result of running the program is as follows:
 
-![Screenshot]()
+<p align="center">
+<img src="https://github.com/adamgracikowski/MagicSquare/blob/master/MagicGenerator%20screenshot.png" />
+</p>
 
 ## Author:
 
