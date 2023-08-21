@@ -63,4 +63,7 @@ private:
 	size_type n;
 	size_type magicConst;
 	static const size_type defaultSize { 6 };
+
+	/* Filling algorithms: */
+	void fillSquare();
 };
