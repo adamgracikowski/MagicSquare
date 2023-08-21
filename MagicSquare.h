@@ -66,4 +66,7 @@ private:
 
 	/* Filling algorithms: */
 	void fillSquare();
+
+	size_type calculateFieldWidth() const;
+
 };
