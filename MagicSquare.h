@@ -66,11 +66,21 @@ private:
 
 	/* Filling algorithms: */
 	void fillSquare();
+	void fillDoublyEven();
+	void fillSinglyEven();
+	void fillOdd(value_type lowerBound = 1);
 
 	bool isValidIdx(size_type idx) const;
 	bool isValidPosition(position_type position) const;
 	bool isValidNumber(value_type number) const;
 
 	size_type calculateFieldWidth() const;
+	position_type findNewPosition(position_type oldPosition) const;
+	bool isToBeFilled(position_type position) const;
+
+	row_type& operator[](size_type rowIdx);
+
+	void swapColumnsWithOther(size_type colIdx1, MagicSquare& other, size_type colIdx2);
+	void insertSubsquare(position_type position, MagicSquare& K);
 
 };

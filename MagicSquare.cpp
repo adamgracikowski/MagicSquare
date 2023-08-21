@@ -172,6 +172,102 @@ MagicSquare::size_type MagicSquare::calculateFieldWidth() const
 	return size_type(to_string(getMaxNumber()).size());
 }
 
+void MagicSquare::fillSquare()
+{
+	if (n % 4 == 0)
+		fillDoublyEven();
+	else if (n % 4 == 2)
+		fillSinglyEven();
+	else
+		fillOdd();
+}
+
+void MagicSquare::fillDoublyEven()
+{
+	value_type lowerBound{ 1 }, upperBound{ getMaxNumber() };
+
+	for (size_type i{}, n{ getSize() }; i < n; ++i)
+	{
+		for (size_type j{}; j < n; ++j)
+		{
+			if (isToBeFilled(position_type(i, j)))
+				square[i][j] = lowerBound;
+			else
+				square[i][j] = upperBound;
+			lowerBound++;
+			upperBound--;
+		}
+	}
+}
+
+void MagicSquare::fillSinglyEven()
+{
+	using st = size_type;
+
+	st n{ getSize() };
+
+	if (n == 2)
+	{
+		square[0][0] = 1;
+		square[0][1] = 3;
+		square[1][0] = 4;
+		square[1][1] = 2;
+		return;
+	}
+
+	st quadrantSize = n / 2;
+	value_type quadrantIncrement = quadrantSize * quadrantSize;
+
+	MagicSquare A(quadrantSize);
+	A.fillOdd(1);
+	MagicSquare B(quadrantSize);
+	B.fillOdd(1 + quadrantIncrement);
+	MagicSquare C(quadrantSize);
+	C.fillOdd(1 + 2 * quadrantIncrement);
+	MagicSquare D(quadrantSize);
+	D.fillOdd(1 + 3 * quadrantIncrement);
+
+	st k = (n - 2) / 4;
+	for (st i{}; i < k; ++i)
+	{
+		A.swapColumnsWithOther(i, D, i);
+	}
+
+	for (st i{}; i < k - 1; ++i)
+	{
+		C.swapColumnsWithOther(quadrantSize - 1 - i, B, quadrantSize - 1 - i);
+	}
+
+	st quadrantCenter = (quadrantSize - 1) / 2;
+
+	swap(A[quadrantCenter][0],
+		D[quadrantCenter][0]);
+	swap(A[quadrantCenter][quadrantCenter],
+		D[quadrantCenter][quadrantCenter]);
+
+	insertSubsquare(position_type(0, 0), A);
+	insertSubsquare(position_type(0, n / 2), C);
+	insertSubsquare(position_type(n / 2, 0), D);
+	insertSubsquare(position_type(n / 2, n / 2), B);
+}
+
+void MagicSquare::fillOdd(value_type lowerBound)
+{
+	for (row_type& row : square)
+		std::fill(row.begin(), row.end(), 0);
+
+	size_type i{ 1 }, j{ size_type((n + 1) / 2 - 2) };
+
+	value_type maxNumber{ getMaxNumber() };
+	for (size_type k{}, n{ getSize() }; k < maxNumber; ++k)
+	{
+		position_type nowaPozycja = findNewPosition(position_type(i, j));
+		i = nowaPozycja.first;
+		j = nowaPozycja.second;
+		square[i][j] = lowerBound++;
+	}
+}
+
 bool MagicSquare::isValidIdx(size_type idx) const
 {
 	return (idx >= 0 && idx < getSize());
@@ -262,5 +358,57 @@ void MagicSquare::swapRows(size_type rowIdx1, size_type rowIdx2)
 	if (isValidIdx(rowIdx1) && isValidIdx(rowIdx2))
 	{
 		swap(square[rowIdx1], square[rowIdx2]);
+	}
+}
+
+MagicSquare::position_type MagicSquare::findNewPosition(position_type oldPosition) const
+{
+	size_type nextI{ oldPosition.first - 1 }, nextJ{ oldPosition.second + 1 };
+	if (nextI == noPosition.first)
+		nextI = getSize() - 1;
+	if (nextJ == getSize())
+		nextJ = 0;
+	if (square[nextI][nextJ] != 0)
+	{
+		nextI = oldPosition.first + 1;
+		nextJ = oldPosition.second;
+	}
+	return position_type(nextI, nextJ);
+}
+
+bool MagicSquare::isToBeFilled(position_type position) const
+{
+	size_type i{ position.first }, j{ position.second };
+	return (((i >= 0 && i < n / 4) || (i > 3 * n / 4 - 1 && i < n)) &&
+		((j >= 0 && j < n / 4) || (j > 3 * n / 4 - 1 && j < n)) ||
+		((i > n / 4 - 1 && i <= 3 * n / 4 - 1 && j > n / 4 - 1 && j < 3 * n / 4)));
+}
+
+MagicSquare::row_type& MagicSquare::operator[](size_type rowIdx)
+{
+	if (!isValidIdx(rowIdx))
+		throw InvalidIdx(rowIdx, getSize());
+	return square[rowIdx];
+}
+
+void MagicSquare::swapColumnsWithOther(size_type colIdx1, MagicSquare& other, size_type colIdx2)
+{
+	for (size_type i{ colIdx1 }, n{ getSize() }; i <= colIdx2; ++i)
+	{
+		for (size_type j{}; j < n; ++j)
+			swap(square[j][i], other.square[j][i]);
+	}
+}
+
+void MagicSquare::insertSubsquare(position_type position, MagicSquare& sub)
+{
+	size_type i1{}, j1{};
+	for (size_type i{ position.first }; i < position.first + sub.n; ++i, ++i1)
+	{
+		for (size_type j{ position.second }; j < position.second + sub.n; ++j, ++j1)
+		{
+			square[i][j] = sub.square[i1][j1];
+		}
+		j1 = 0;
 	}
 }
