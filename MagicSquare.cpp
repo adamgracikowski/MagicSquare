@@ -164,4 +164,56 @@ bool MagicSquare::isValidNumber(value_type number) const
 	return (number >= 1 && number <= getMaxNumber());
 }
 
+bool MagicSquare::moveNumber(value_type number, position_type position)
+{
+	if (isValidPosition(position) && isValidNumber(number))
+	{
+		position_type positionOfNumber = findNumber(number);
+		swapRows(position.first, positionOfNumber.first);
+		swapColumns(position.second, positionOfNumber.second);
+		return true;
+	}
+	return false;
+}
 
+void MagicSquare::shuffleRows()
+{
+	random_shuffle(square.begin(), square.end());
+}
+
+void MagicSquare::shuffleColumns()
+{
+	transpose();
+	shuffleRows();
+	transpose();
+}
+
+void MagicSquare::transpose()
+{
+	for (size_type i{}, n{ getSize() }; i < n; ++i)
+	{
+		for (size_type j{ i + 1 }; j < n; ++j)
+		{
+			swap(square[i][j], square[j][i]);
+		}
+	}
+}
+
+void MagicSquare::swapColumns(size_type colIdx1, size_type colIdx2)
+{
+	if (isValidIdx(colIdx1) && isValidIdx(colIdx2))
+	{
+		for (size_type i{}, n{ getSize() }; i < n; ++i)
+		{
+			swap(square[i][colIdx1], square[i][colIdx2]);
+		}
+	}
+}
+
+void MagicSquare::swapRows(size_type rowIdx1, size_type rowIdx2)
+{
+	if (isValidIdx(rowIdx1) && isValidIdx(rowIdx2))
+	{
+		swap(square[rowIdx1], square[rowIdx2]);
+	}
+}
