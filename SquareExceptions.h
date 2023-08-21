@@ -28,3 +28,21 @@ public:
 private:
 	std::string msg;
 };
+
+class FileException : public SquareException
+{
+public:
+	explicit FileException(std::string msg = "") : msg{ msg } {}
+	virtual const char* what() const noexcept override { std::cout << msg << std::endl; return msg.c_str(); }
+private:
+	std::string msg;
+};
+
+class InvalidInput : public SquareException
+{
+public:
+	explicit InvalidInput(std::string msg = "") : msg{ msg } {}
+	virtual const char* what() const noexcept override { std::cout << msg << std::endl; return msg.c_str(); }
+private:
+	std::string msg;
+};
