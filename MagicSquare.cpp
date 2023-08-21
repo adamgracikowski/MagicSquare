@@ -164,6 +164,30 @@ bool MagicSquare::isValidNumber(value_type number) const
 	return (number >= 1 && number <= getMaxNumber());
 }
 
+bool MagicSquare::saveToTextFile(std::string filename) const
+{
+	ofstream file(filename, ios::out | ios::app);
+	if (!file)
+		return false;
+	file << *this << endl;
+	file.close();
+	return true;
+}
+
+bool MagicSquare::saveToBinaryFile(std::string filename) const
+{
+	ofstream file(filename, ios::out, ios::binary);
+	if (!file)
+		return false;
+	if (file.write((char*)&(*this), sizeof(*this)))
+	{
+		file.close();
+		return true;
+	}
+	file.close();
+	return false;
+}
+
 bool MagicSquare::moveNumber(value_type number, position_type position)
 {
 	if (isValidPosition(position) && isValidNumber(number))
