@@ -44,4 +44,23 @@ private:
 	void printLine(size_type numberOfChars, char c = '-') const noexcept;
 };
 
+template<typename T>
+inline T MagicGenerator::readInputFromUser(std::string prompt) const
+{
+	T number{};
+	std::cout << prompt;
+	if (!(std::cin >> number)) {
+		throw InvalidInput("The input was not a number.");
+	}
+	return number;
+}
 
+template<>
+inline std::string MagicGenerator::readInputFromUser(std::string prompt) const
+{
+	std::string input{};
+	std::cout << prompt;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	if (!getline(std::cin, input)) throw InvalidInput("Error while reading a string.");
+	return input;
+}
