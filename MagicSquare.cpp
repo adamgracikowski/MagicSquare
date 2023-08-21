@@ -82,6 +82,25 @@ MagicSquare::size_type MagicSquare::getMagicConst() const
 	return magicConst;
 }
 
+bool MagicSquare::isOrdinaryMagic() const
+{
+	value_type magicConst{ getMagicConst() };
+	return (isSemiMagic() &&
+		getForwardDiagonalSum() == magicConst &&
+		getBackDiagonalSum() == magicConst);
+}
+
+bool MagicSquare::isSemiMagic() const
+{
+	value_type magicConst{ getMagicConst() };
+	for (size_type i{}, n{ getSize() }; i < n; ++i)
+	{
+		if (getRowSum(i) != magicConst || getColumnSum(i) != magicConst)
+			return false;
+	}
+	return true;
+}
+
 MagicSquare::value_type MagicSquare::getRowSum(size_type idx) const
 {
 	if (!isValidIdx(idx))
