@@ -67,6 +67,10 @@ private:
 	/* Filling algorithms: */
 	void fillSquare();
 
+	bool isValidIdx(size_type idx) const;
+	bool isValidPosition(position_type position) const;
+	bool isValidNumber(value_type number) const;
+
 	size_type calculateFieldWidth() const;
 
 };

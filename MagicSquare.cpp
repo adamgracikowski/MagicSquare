@@ -1,4 +1,5 @@
 #include "MagicSquare.h"
+#include "SquareExceptions.h"
 
 #include <algorithm>
 #include <numeric>
@@ -81,8 +82,67 @@ MagicSquare::size_type MagicSquare::getMagicConst() const
 	return magicConst;
 }
 
+MagicSquare::value_type MagicSquare::getRowSum(size_type idx) const
+{
+	if (!isValidIdx(idx))
+		throw InvalidIdx(idx, getSize());
+
+	return accumulate(square[idx].begin(), square[idx].end(), 0);
+}
+
+MagicSquare::value_type MagicSquare::getColumnSum(size_type idx) const
+{
+	value_type result{};
+	if (isValidIdx(idx))
+	{
+		for (size_type i{}, n{ getSize() }; i < n; ++i)
+		{
+			result += square[i][idx];
+		}
+	}
+	else
+		throw InvalidIdx(idx, getSize());
+	return result;
+}
+
+MagicSquare::value_type MagicSquare::getForwardDiagonalSum() const
+{
+	value_type result{};
+	for (size_type i{}, n{ getSize() }, j{ n - 1 }; i < n; ++i, --j)
+	{
+		result += square[i][j];
+	}
+	return result;
+}
+
+MagicSquare::value_type MagicSquare::getBackDiagonalSum() const
+{
+	value_type result{};
+	for (size_type i{}, n{ getSize() }; i < n; ++i)
+	{
+		result += square[i][i];
+	}
+	return result;
+}
+
 MagicSquare::size_type MagicSquare::calculateFieldWidth() const
 {
 	return size_type(to_string(getMaxNumber()).size());
 }
+
+bool MagicSquare::isValidIdx(size_type idx) const
+{
+	return (idx >= 0 && idx < getSize());
+}
+
+bool MagicSquare::isValidPosition(position_type position) const
+{
+	return (isValidIdx(position.first) && isValidIdx(position.second));
+}
+
+bool MagicSquare::isValidNumber(value_type number) const
+{
+	return (number >= 1 && number <= getMaxNumber());
+}
+
 
